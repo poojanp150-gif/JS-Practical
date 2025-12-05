@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCQS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+        <style>
+            .container{
+                box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            }
+            body, .next{
+                 background: linear-gradient(to right, #667eea, #764ba2);
+            }
+        </style>
+</head>
+<body>
+    <div class="container card mt-5">
+        <div id="Qusion1">
+            <form class="question">
+                <p id="timecounter1" class="text-end" style="height: 20px;"></p>
+                <legend>Q.1 Which method is used to print something in the browser console?</legend>
+                <input type="radio" id="html" value="console.log()">
+                <label for="html">console.log()</label><br>
+                <input type="radio" id="css"  value="alert()">
+                <label for="css">alert()</label><br>
+                <input type="radio" id="javascript" value="print()">
+                <label for="javascript">print()</label>
+            </form>
+        </div>
+        <div id="Qusion2" style="display: none;">
+            <form class="question">
+                <p id="timecounter2" class="text-end" style="height: 20px;"></p>
+                <legend>Q.2 What will be the output of: typeof null in JavaScript?</legend>
+                <input type="radio" id="red" value="null">
+                <label for="red">null</label><br>
+                <input type="radio" id="blue" value="object">
+                <label for="blue">object</label><br>
+                <input type="radio" id="green" value="undefined">
+                <label for="green">undefined</label>
+            </form>
+        </div>
+        <div id="Qusion3" style="display: none;">
+            <form class="question">
+                <p id="timecounter3" class="text-end" style="height: 20px;"></p>
+                <legend>Q.3 Which keyword is used to declare a variable in JavaScript?</legend>
+                <input type="radio" id="red" value="var">
+                <label for="red">var</label><br>
+                <input type="radio" id="blue" value="int">
+                <label for="blue">int</label><br>
+                <input type="radio" id="green" value="din">
+                <label for="green">din</label>
+            </form>
+        </div>
+        <div>
+            <button id="next" class="btn btn-primary mt-4 mb-3">next</button>
+            <button id="submit" class="btn btn-success mt-4 mb-3" style="display: none;">Submit</button>
+           <p id="score" class="text-center fs-4 fw-bold text-success mt-2 mb-2 "></p>
+        </div>
+    </div>
+    <script>
+
+        let currentQuestion = 1
+
+        document.getElementById("next").addEventListener("click", () => {
+            if (currentQuestion === 1) {
+                clearInterval(timer1)
+                showQuestion2()
+                currentQuestion++
+
+            } else if (currentQuestion === 2) {
+                clearInterval(time2);
+                showQuestion3();
+                currentQuestion++
+            }
+        });
+
+        let a = 1
+        let timer1
+
+        function startTimer1() {
+
+            timer1 = setInterval(() => {
+                if (a <= 5) {
+                    document.querySelector("#timecounter1").innerHTML = "00:" + a
+                    a++
+                } else {
+                    clearInterval(timer1)
+                    showQuestion2()
+                }
+            }, 1000)
+        }
+
+        let b = 1;
+        let time2;
+
+        function startTimer2() {
+            time2 = setInterval(() => {
+                if (b <= 5) {
+                    document.querySelector("#timecounter2").innerText = "00:" + b
+                    b++
+
+                } else {
+                    clearInterval(time2)
+                    showQuestion3()
+                }
+            }, 1000)
+        }
+
+        function showQuestion2() {
+            document.querySelector("#Qusion1").style.display = "none"
+            document.querySelector("#Qusion2").style.display = "block"
+            startTimer2()
+        }
+
+
+        let c = 1;
+        let time3;
+
+        function startTimer3() {
+            time3 = setInterval(() => {
+                if (c <= 5) {
+                    document.querySelector("#timecounter3").innerText = "00:" + c
+                    c++
+                } else {
+                    clearInterval(time3)
+                    
+                     Get_Score()
+                }
+            }, 1000)
+        }
+        function showQuestion3() {
+            document.querySelector("#Qusion1").style.display = "none"
+            document.querySelector("#Qusion2").style.display = "none"
+            document.querySelector("#Qusion3").style.display = "block"
+            document.getElementById("next").style.display = "none"
+            document.getElementById("submit").style.display = "inline-block"
+            startTimer3()
+        }
+
+        startTimer1()
+
+        const originalAns = ["console.log()", "object", "var"]
+
+       function Get_Score() {
+            let countscore = 0;
+            const questions = document.querySelectorAll(".question")
+
+            Array.from(questions).map((inputdata, i) => {
+
+                const selected = inputdata.querySelector('input[type="radio"]:checked')
+
+                if (selected && selected.value === originalAns[i]) {
+                    countscore++
+                }
+
+            })
+
+            document.querySelectorAll(".question").forEach(q => q.style.display = "none")
+            document.getElementById("submit").style.display = "none"
+            document.getElementById("next").style.display = "none"
+            document.getElementById("score").textContent = "Your Score is: "+countscore+" / "+originalAns.length
+        }
+
+        document.getElementById("submit").addEventListener("click", () => {
+            Get_Score()
+        })
+    </script>
+</body>
+
+</html>
