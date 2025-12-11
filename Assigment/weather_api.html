@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Pro UI</title>
+
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: #1e1b3a;
+            font-family: 'Segoe UI', sans-serif;
+            padding-top: 50px;
+        }
+
+        .weather-card {
+            background: #2b2754;
+            border-radius: 20px;
+            padding: 30px;
+            color: white;
+            max-width: 600px;
+            margin: auto;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .main-temp {
+            font-size: 70px;
+            font-weight: 600;
+        }
+
+        .small-text {
+            opacity: 0.8;
+            font-size: 15px;
+        }
+
+        .weather-icon {
+            width: 110px;
+        }
+
+        .info-box {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 20px;
+            padding-top: 20px;
+        }
+
+        .info-item {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .search-box {
+            max-width: 600px;
+            margin: auto;
+            margin-bottom: 25px;
+        }
+
+        .form-control {
+            background: #2b2754;
+            border: none;
+            color: white;
+            border-radius: 12px;
+            height: 48px;
+        }
+
+        .btn-custom {
+            background: #6b59ff;
+            color: white;
+            border-radius: 12px;
+            height: 48px;
+        }
+
+        .btn-custom:hover {
+            background: #7a68ff;
+        }
+    </style>
+</head>
+
+<body>
+
+    
+    <div class="search-box input-group mb-4">
+        <input type="text" id="city" class="form-control" placeholder="Search city...">
+        <button class="btn btn-custom" onclick="getWeather()">Search</button>
+    </div>
+
+    
+    <div class="weather-card text-center" id="result">
+        <p>Search any city...</p>
+    </div>
+
+    <script>
+        function getWeather() {
+            let city = document.getElementById("city").value || "Ahmedabad";
+            // let key = "73ae5b68074394ad7ee5e7b922918aab";
+
+            fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=73ae5b68074394ad7ee5e7b922918aab&units=metric`)
+                .then(res => res.json())
+                .then(data => {
+                    let icon = data.weather[0].icon;
+                    let desc = data.weather[0].description;
+                    let temp = data.main.temp;
+                    let feels = data.main.feels_like;
+                    let humidity = data.main.humidity;
+                    let pressure = data.main.pressure;
+                    let wind = data.wind.speed;
+                    let visibility = (data.visibility / 1000).toFixed(1);
+
+                    document.getElementById("result").innerHTML = `
+                        <div class="d-flex justify-content-between">
+                            <div class="text-start">
+                                <div class="small-text">${new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})}</div>
+                                <div class="main-temp">${temp}°C</div>
+                                <div class="h4 text-capitalize">${desc}</div>
+                                <div class="small-text">Feels like ${feels}°</div>
+                            </div>
+                            <div>
+                                <img src="https://openweathermap.org/img/wn/${icon}@2x.png" class="weather-icon">
+                            </div>
+                        </div>
+
+                        <p class="mt-3 small-text">The skies will be mostly ${desc}. Visibility will be ${visibility} km.</p>
+
+                        <div class="row text-center info-box">
+                            <div class="col info-item">
+                                <strong>Wind</strong><br>${wind} km/h
+                            </div>
+                            <div class="col info-item">
+                                <strong>Humidity</strong><br>${humidity}%
+                            </div>
+                            <div class="col info-item">
+                                <strong>Pressure</strong><br>${pressure} mb
+                            </div>
+                            <div class="col info-item">
+                                <strong>Visibility</strong><br>${visibility} km
+                            </div>
+                        </div>
+                    `;
+                })
+                .catch(() => {
+                    document.getElementById("result").innerHTML = `<p class="text-danger">City not found!</p>`;
+                });
+        }
+    </script>
+
+</body>
+</html>
